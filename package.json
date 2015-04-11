@@ -1,0 +1,33 @@
+{
+  "name": "akaybe",
+  "version": "0.0.2",
+  "license": "MIT",
+  "homepage": "http://akaybe.richplastow.com/",
+  "author": "Rich Plastow <rich@richplastow.com> (http://richplastow.com/)",
+  "description": "A collection of tiny ‘pure functions’",
+  "main": "./build/akaybe.js",
+  "bin":{
+    "akaybe": "./bin/akaybe",
+    "akaybe-build": "./bin/akaybe-build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richplastow/akaybe.git"
+  },
+  "keywords": [
+    "function",
+    "library",
+    "tiny",
+    "utility",
+    "coffeescript",
+    "litcoffee"
+  ],
+  "devDependencies": {
+    "coffee-script": "latest",
+    "nodemon": "latest"
+  },
+  "scripts": {
+    "build": "node bin/akaybe-build",
+    "test": "node test/run-test.js"
+  }
+}

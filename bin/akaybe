@@ -1,0 +1,108 @@
+#!/usr/bin/env node
+
+/*! akaybe CLI 0.0.2 //// MIT Licence //// http://akaybe.richplastow.com/ */
+
+!function (root) { 'use strict';
+
+
+    //// Define constants.
+    var I     = 'akaybe'
+      , V     = '0.0.2'
+
+
+    //// Load the Akaybe module.
+      , Akaybe = require('../')
+
+
+    //// Declare and initialize variables.
+      , argv = process.argv.slice()
+      , arg
+      , e
+
+
+    //// Usage instructions.
+      , help = [
+            I + ' ' + V
+          , '================================'.substr(0, (I + ' ' + V).length)
+          , ''
+          , 'A collection of tiny ‘pure functions’.'
+          , ''
+          , ''
+          , 'Usage'
+          , '-----'
+          , ''
+          , I + ' -h'
+          , I + ' --version'
+          , ''
+          , ''
+          , 'Options'
+          , '-------'
+          , ''
+          , '-h --help     Show this help.'
+          , '-v --version  Show the ' + I + ' version.'
+          , ''
+          , ''
+        ]
+
+
+    //// `normalizeArg()` deals with arguments like '--foo=bar' and '-xyz'.
+      , normalizeArg = function () {
+
+            // Remove the first argument from `argv`.
+            var a = argv.shift();
+
+            // Deal with 'foo', '--' or '-'.
+            if ('-' !== a.substr(0, 1) || '--' === a || '-' === a) { return a; }
+
+            // Deal with '--foo', '--foo=bar' or even '--foo=bar=!='.
+            if ( '--' === a.substr(0, 2) ) {
+                a = a.split('=');
+                if (1 < a.length) {
+                    argv.unshift( a.slice(1).join('=') ); // reinstate 'bar=!='
+                }
+                return a[0]; // eg '--foo'
+            }
+
+            // No need to process a single argument, eg '-w'.
+            if (2 == a.length) { return a; }
+
+            // Deal with '-xyz', which is shorthand for '-x -y -z'.
+            argv = a
+               .substr(2) // trim the leading '-x'
+               .split('') // convert 'yz' to ['y','z']
+               .map( function (c) { return '-' + c; } ) // ['-y', '-z']
+               .concat(argv) // prepend these elements onto `argv`
+            ;
+            return a.substr(0, 2); // return '-x'
+        }
+
+
+    //// `exit()` cleanly quits the CLI, eg `return exit(3, "Oops, problems!")`.
+      , exit = function (code, message, indent) {
+            message = message + ( indent ? ':\n  ' + indent : '' );
+            message += ( '\n' === message.slice(-1) ) ? '' : '\n';
+            process.stdout.write(message);
+            process.exit(code);
+        }
+
+
+    ;
+
+
+    //// Process each argument.
+    argv.splice(0, 2); // ignore 'node' and the path to this file
+    while (argv.length) {
+        arg = normalizeArg();
+        switch (arg) {
+            case '-h':
+            case '--help':
+                return exit( 0, help.join('\n') );
+            case '-v':
+            case '--version':
+                return exit(0, V);
+            default:
+        }
+    }
+
+
+}(this);

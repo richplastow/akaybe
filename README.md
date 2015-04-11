@@ -1,5 +1,5 @@
-Akaybe 0.0.1
-============
+Akaybe
+======
 
 #### Simple platform-agnostic functions which each minify to 1024 bytes or less
 
